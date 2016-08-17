@@ -6,7 +6,8 @@
 using namespace std;
 typedef long long ll;
 const double PI=acos(-1.0);
-const int mod=998244353;
+const int mod=7;
+//const int mod=998244353;
 const int G=3;
 
 struct Complex{
@@ -59,7 +60,7 @@ void transform(int x[],int n,int on){
         }
     }
     if(on==-1){
-        int inv=inverse(n,mod);
+        int inv=inverse(n%mod,mod);
         for(int i=0;i<n;i++){
             x[i]=(ll)x[i]*inv%mod;
         }
@@ -93,7 +94,7 @@ void transform(Complex x[],int n,int on){
 //多项式求逆
 //B(x)=2*B'(x)-A(x)*B'(x)^2
 void polynomial_inverse(int a[],int b[],int tmp[],int deg){
-    b[0]=inverse(a[0],mod);
+    b[0]=inverse(a[0]%mod,mod);
     if(deg==1) return;
     for(int p=2;p<=deg;p<<=1){
         copy(a,a+p,tmp);
@@ -102,14 +103,24 @@ void polynomial_inverse(int a[],int b[],int tmp[],int deg){
         for(int i=0;i<p;i++){
             b[i]=(ll)(2-(ll)tmp[i]*b[i]%mod+mod)*b[i]%mod;
         }
-        transform(tmp,p,-1);
+        transform(b,p,-1);
     }
 }
 
-int test1[1000000],test2[1000000];
 int main(){
     int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    
+    int a[8]={0},b[8]={0},tmp[8]={0};
+    a[0]=1,a[1]=2,a[2]=3,a[3]=4,a[4]=5;
+    int p=4;
+    polynomial_inverse(a,b,tmp,p);
+    for(int i=0;i<p;i++){
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+    for(int i=0;i<p;i++){
+        cout<<b[i]<<" ";
+    }
+    cout<<endl;
     int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
     cout<<(endTime-startTime)<<"ms"<<endl;
     return 0;
