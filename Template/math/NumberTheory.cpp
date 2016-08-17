@@ -68,7 +68,7 @@ int getFactor(ll x){
     return fatCnt;
 }
 
-int pow_mod(int a,int n,int p){
+int power_mod(int a,int n,int p){
     int r=1;
     while(n){
         if(n%2) r=(ll)r*a%p;
@@ -85,7 +85,7 @@ int getPrimitiveRoot(int p){
     for(int x=2;x<p;x++){
         bool found=true;
         for(int i=0;i<n;i++){
-            if(pow_mod(x,(p-1)/factor[i][0],p)==1){
+            if(power_mod(x,(p-1)/factor[i][0],p)==1){
                 found=false;break;
             }
         }
