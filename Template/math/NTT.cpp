@@ -23,7 +23,7 @@ int pow_mod(int a,int n){
     return r;
 }
 
-void fnt(int x[],int n,int on){
+void ntt(int x[],int n,int on){
     for(int i=0,j=0;i<n;i++){
         if(i<j) swap(x[i],x[j]);
         for(int k=n>>1;(j^=k)<k;k>>=1);
