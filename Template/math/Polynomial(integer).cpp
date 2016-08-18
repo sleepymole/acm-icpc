@@ -5,29 +5,13 @@
 #include<cmath>
 using namespace std;
 typedef long long ll;
-const double PI=acos(-1.0);
 const int mod=998244353;
 const int G=3;
-
-struct Complex{
-    double x,y;
-    Complex(double _x=0.0,double _y=0.0):x(_x),y(_y){}
-    Complex operator+(const Complex& rhs)const{
-        return Complex(x+rhs.x,y+rhs.y);
-    }
-    Complex operator-(const Complex& rhs)const{
-        return Complex(x-rhs.x,y-rhs.y);
-    }
-    Complex operator*(const Complex& rhs)const{
-        return Complex(x*rhs.x-y*rhs.y,x*rhs.y+y*rhs.x);
-    }
-};
 
 //求a在模m下的逆,要求a<m且(a,m)=1
 int inverse(int a,int m){
     return a==1?1:(ll)inverse(m%a,m)*(m-m/a)%m;
 }
-
 
 int power_mod(int a,int n){
     int r=1,k=n>0?n:-n;
@@ -66,30 +50,6 @@ void transform(int x[],int n,int on){
     }
 }
 
-//快速傅里叶变换(浮点型)
-void transform(Complex x[],int n,int on){
-    for(int i=0,j=0;i<n;i++){
-        if(i<j) swap(x[i],x[j]);
-        for(int k=n>>1;(j^=k)<k;j++);
-    }
-    for(int h=2;h<=n;h<<=1){
-        Complex wn(cos(2*PI/h),sin(on*2*PI/h));
-        for(int j=0;j<n;j+=h){
-            Complex w(1,0);
-            for(int k=j;k<j+h/2;k++){
-                Complex u=x[k],t=w*x[k+h/2];
-                x[k]=u+t; x[k+h/2]=u-t;
-                w=w*wn;
-            }
-        }
-    }
-    if(on==-1){
-        for(int i=0;i<n;i++){
-            x[i].x=x[i].x/n;
-        }
-    }
-}
-
 //多项式求逆(数论版) deg必须为2的幂次,且数组必须开到deg的两倍
 void polynomial_inverse(int a[],int b[],int tmp[],int deg){
     b[0]=inverse(a[0]%mod,mod);
@@ -104,23 +64,6 @@ void polynomial_inverse(int a[],int b[],int tmp[],int deg){
         }
         transform(b,p,-1);
         fill(b+h,b+p,0);
-    }
-}
-
-//多项式求逆(浮点型) deg必须为2的幂次,且数组必须开到deg的两倍
-void polynomial_inverse(Complex a[],Complex b[],Complex tmp[],int deg){
-    b[0].x=1.0/a[0].x;
-    if(deg==1) return;
-    for(int h=2;h<=deg;h<<=1){
-        copy(a,a+h,tmp);
-        int p=h<<1;
-        transform(b,p,1);
-        transform(tmp,p,1);
-        for(int i=0;i<p;i++){
-            b[i]=(Complex(2,0)-tmp[i]*b[i])*b[i];
-        }
-        transform(b,p,-1);
-        fill(b+h,b+p,Complex(0,0));
     }
 }
 
