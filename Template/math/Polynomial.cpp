@@ -90,7 +90,7 @@ void transform(Complex x[],int n,int on){
     }
 }
 
-//多项式求逆 deg必须为2的幂次,且数组必须开到deg的两倍
+//多项式求逆(数论版) deg必须为2的幂次,且数组必须开到deg的两倍
 void polynomial_inverse(int a[],int b[],int tmp[],int deg){
     b[0]=inverse(a[0]%mod,mod);
     if(deg==1) return;
@@ -107,9 +107,26 @@ void polynomial_inverse(int a[],int b[],int tmp[],int deg){
     }
 }
 
+//多项式求逆(浮点型) deg必须为2的幂次,且数组必须开到deg的两倍
+void polynomial_inverse(Complex a[],Complex b[],Complex tmp[],int deg){
+    b[0].x=1.0/a[0].x;
+    if(deg==1) return;
+    for(int h=2;h<=deg;h<<=1){
+        copy(a,a+h,tmp);
+        int p=h<<1;
+        transform(b,p,1);
+        transform(tmp,p,1);
+        for(int i=0;i<p;i++){
+            b[i]=(Complex(2,0)-tmp[i]*b[i])*b[i];
+        }
+        transform(b,p,-1);
+        fill(b+h,b+p,Complex(0,0));
+    }
+}
+
 int main(){
     int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    
+    //TODO
     int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
     cout<<(endTime-startTime)<<"ms"<<endl;
     return 0;
