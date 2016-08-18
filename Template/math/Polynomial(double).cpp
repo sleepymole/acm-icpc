@@ -24,7 +24,7 @@ struct Complex{
 void transform(Complex x[],int n,int on){
     for(int i=0,j=0;i<n;i++){
         if(i<j) swap(x[i],x[j]);
-        for(int k=n>>1;(j^=k)<k;j++);
+        for(int k=n>>1;(j^=k)<k;k>>=1);
     }
     for(int h=2;h<=n;h<<=1){
         Complex wn(cos(2*PI/h),sin(on*2*PI/h));
