@@ -6,8 +6,7 @@
 using namespace std;
 typedef long long ll;
 const double PI=acos(-1.0);
-const int mod=7;
-//const int mod=998244353;
+const int mod=998244353;
 const int G=3;
 
 struct Complex{
@@ -91,36 +90,26 @@ void transform(Complex x[],int n,int on){
     }
 }
 
-//多项式求逆
-//B(x)=2*B'(x)-A(x)*B'(x)^2
+//多项式求逆 deg必须为2的幂次,且数组必须开到deg的两倍
 void polynomial_inverse(int a[],int b[],int tmp[],int deg){
     b[0]=inverse(a[0]%mod,mod);
     if(deg==1) return;
-    for(int p=2;p<=deg;p<<=1){
-        copy(a,a+p,tmp);
+    for(int h=2;h<=deg;h<<=1){
+        copy(a,a+h,tmp);
+        int p=h<<1;
         transform(b,p,1);
         transform(tmp,p,1);
         for(int i=0;i<p;i++){
             b[i]=(ll)(2-(ll)tmp[i]*b[i]%mod+mod)*b[i]%mod;
         }
         transform(b,p,-1);
+        fill(b+h,b+p,0);
     }
 }
 
 int main(){
     int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    int a[8]={0},b[8]={0},tmp[8]={0};
-    a[0]=1,a[1]=2,a[2]=3,a[3]=4,a[4]=5;
-    int p=4;
-    polynomial_inverse(a,b,tmp,p);
-    for(int i=0;i<p;i++){
-        cout<<a[i]<<" ";
-    }
-    cout<<endl;
-    for(int i=0;i<p;i++){
-        cout<<b[i]<<" ";
-    }
-    cout<<endl;
+    
     int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
     cout<<(endTime-startTime)<<"ms"<<endl;
     return 0;

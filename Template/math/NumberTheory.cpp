@@ -34,7 +34,7 @@ int euler_phi(int n){
 }
 
 int euler[maxn];
-int getEuler(){
+void getEuler(){
     euler[1]=1;
     for(int i=2;i<maxn;i++){
         if(!euler[i]){
@@ -81,7 +81,6 @@ int power_mod(int a,int n,int p){
 //最小原根
 int getPrimitiveRoot(int p){
     int n=getFactor(p-1);
-    int x=-1;
     for(int x=2;x<p;x++){
         bool found=true;
         for(int i=0;i<n;i++){
