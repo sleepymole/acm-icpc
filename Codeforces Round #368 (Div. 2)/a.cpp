@@ -10,7 +10,7 @@ int main(){
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
             cin>>str;
-            if(str=="G"||str=="C"||str=="Y"){
+            if(str=="M"||str=="C"||str=="Y"){
                 flag=false;
             }
         }
