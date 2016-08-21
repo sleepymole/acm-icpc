@@ -9,7 +9,7 @@ typedef long long ll;
 const int mod=998244353;
 const int G=3;
 
-//求a关于m的逆,要求a<m且(a,m)=1
+//求a关于m的逆,要求a>0&&a<m&&(a,m)=1
 int inverse(int a,int m){
     return a==1?1:(ll)inverse(m%a,m)*(m-m/a)%m;
 }
@@ -51,14 +51,16 @@ void transform(int x[],int n,int on){
     }
 }
 
-//多项式求逆(数论版),求A^(-1)(x)(modx^n),结果存放在b中,b和tmp必须初始化为0
-void polynomial_inverse(int a[],int b[],int tmp[],int n){ 
+//多项式求逆(数论版) 结果存放在b中,b需要初始化
+void polynomial_inverse(int a[],int b[],int n){
     int len=1;
     while(len<n) len<<=1;
+    int *tmp=new int[len<<1]; //视情况而定,若调用较多，可改为静态数组
     b[0]=inverse(a[0]%mod,mod);
     for(int h=2;h<=len;h<<=1){
         int p=h<<1;
         copy(a,a+h,tmp);
+        fill(tmp+h,tmp+p,0);
         transform(b,p,1);
         transform(tmp,p,1);
         for(int i=0;i<p;i++){
@@ -68,15 +70,100 @@ void polynomial_inverse(int a[],int b[],int tmp[],int n){
         fill(b+h,b+p,0);
     }
     fill(b+n,b+len,0);
+    delete[]tmp;tmp=NULL;
 }
 
-//多项式除法(数论版),A(x)=D(x)B(x)+R(x),A(x)和B(x)分别为n-1次和m-1次多项式，a0,b0,tmp为临时数组，必须初始化为0
-void polynomial_division(int a[],int n,int b[],int m,int d[],int r[],int a0[],int b0[],int tmp[]){
+//多项式开方(数论版),结果存放在b中,b需要初始化
+void polynomial_sqrt(int a[],int b[],int n){
+    int len=1;
+    while(len<n) len<<=1;
+    int *tmp=new int[len<<1]; //视情况而定,若调用较多，可改为静态数组
+    b[0]=1;//若A(x)的常数项不为0,b[0]应该等于a[0]关于mod的二次剩余
+    for(int h=2;h<=len;h<<=1){
+        int p=h<<1;
+        fill(tmp,tmp+p,0);
+        polynomial_inverse(b,tmp,h);
+        transform(b,h,1);
+        for(int i=0;i<h;i++){
+            b[i]=(ll)b[i]*b[i]%mod;
+        }
+        transform(b,h,-1);
+        int inv2=inverse(2,mod);
+        for(int i=0;i<h;i++){
+            b[i]=(ll)(b[i]+a[i])*inv2%mod;
+        }
+        transform(b,p,1);
+        transform(tmp,p,1);
+        for(int i=0;i<p;i++){
+            b[i]=(ll)b[i]*tmp[i]%mod;
+        }
+        transform(b,p,-1);
+        fill(b+h,b+p,0);
+    }
+    fill(b+n,b+len,0);
+    delete[]tmp;tmp=NULL;
+}
+
+//多项式求对数,结果存放在b中,b数组需要初始化
+void polynomial_logarithm(int a[],int b[],int n){
+    int p=1;
+    while(p<(n<<1)) p<<=1;
+    int *tmp=new int[p]; //视情况而定,若调用较多，可改为静态数组
+    fill(tmp,tmp+p,0);
+    polynomial_inverse(a,tmp,n);
+    copy(a,a+n,b);
+    for(int i=0;i<n-1;i++){ //求导
+        b[i]=(ll)b[i+1]*(i+1)%mod;
+    }
+    transform(tmp,p,1);
+    transform(b,p,1);
+    for(int i=0;i<p;i++){
+        b[i]=(ll)tmp[i]*b[i]%mod;
+    }
+    transform(b,p,-1);
+    for(int i=n-1;i>0;i--){
+        b[i]=(ll)b[i-1]*inverse(i,mod)%mod;
+    }
+    b[0]=0;//视情况而定
+    fill(b+n,b+p,0);
+    delete[]tmp;tmp=NULL;
+}
+
+void polynomial_exponent(int a[],int b[],int n){
+    int len=1;b[0]=1;
+    while(len<n) len<<=1;
+    int *tmp=new int[len<<1];
+    for(int h=2;h<=len;h<<=1){
+        int p=h<<1;
+        fill(tmp,tmp+p,0);
+        polynomial_logarithm(b,tmp,h);
+        for(int i=0;i<h;i++){
+            tmp[i]=(a[i]-tmp[i]+1)%mod;
+        }
+        transform(b,p,1);
+        transform(tmp,p,1);
+        for(int i=0;i<p;i++){
+            b[i]=(ll)b[i]*tmp[i]%mod;
+        }
+        fill(b+h,b+p,0);
+    }
+    fill(b+n,b+len,0);
+    delete[]tmp;tmp=NULL;
+}
+
+//多项式除法(数论版),A(x)=D(x)B(x)+R(x),A(x)和B(x)分别为n-1次和m-1次多项式
+//A(x)和B(x)的常数项不能为0
+void polynomial_division(int a[],int n,int b[],int m,int d[],int r[]){
+    int *a0=new int[n<<1];
+    int *b0=new int[n<<1];
     int p=1,t=n-m+1;
     while(p<(t<<1)) p<<=1;
     reverse_copy(b,b+m,a0);
-    polynomial_inverse(a0,b0,tmp,t);
+    fill(a0+m,a0+p,0);
+    fill(b0,b0+p,0);
+    polynomial_inverse(a0,b0,t);
     reverse_copy(a,a+n,a0);
+    fill(a0+t,a0+p,0);
     transform(a0,p,1);
     transform(b0,p,1);
     for(int i=0;i<p;i++){
@@ -98,16 +185,13 @@ void polynomial_division(int a[],int n,int b[],int m,int d[],int r[],int a0[],in
     for(int i=0;i<m;i++){
         r[i]=(a[i]-a0[i]+mod)%mod;
     }
+    delete[]a0;a0=NULL;
+    delete[]b0;b0=NULL;
 }
 
 int main(){
     int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    int a[16]={0},b[16]={0},d[16]={0},r[16]={0},a0[16]={0},b0[16]={0},tmp[16]={0};
-    a[0]=1;a[1]=3;a[2]=3;a[3]=1;b[0]=1;b[1]=2;b[3]=1;
-    polynomial_division(a,4,b,3,d,r,a0,b0,tmp);
-    for(int i=0;i<10;i++){
-        cout<<d[i]<<endl;
-    }
+    
     int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
     cout<<(endTime-startTime)<<"ms"<<endl;
     return 0;

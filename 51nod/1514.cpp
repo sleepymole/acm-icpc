@@ -48,12 +48,15 @@ void transform(int x[],int n,int on){
     }
 }
 
-void polynomial_inverse(int a[],int b[],int tmp[],int deg){
+void polynomial_inverse(int a[],int b[],int n){ 
+    int len=1;
+    while(len<n) len<<=1;
+    int *tmp=new int[len<<1];
     b[0]=inverse(a[0]%mod,mod);
-    if(deg==1) return;
-    for(int h=2;h<=deg;h<<=1){
-        copy(a,a+h,tmp);
+    for(int h=2;h<=len;h<<=1){
         int p=h<<1;
+        copy(a,a+h,tmp);
+        fill(tmp+h,tmp+p,0);
         transform(b,p,1);
         transform(tmp,p,1);
         for(int i=0;i<p;i++){
@@ -62,26 +65,43 @@ void polynomial_inverse(int a[],int b[],int tmp[],int deg){
         transform(b,p,-1);
         fill(b+h,b+p,0);
     }
+    fill(b+n,b+len,0);
+    delete[]tmp;tmp=NULL;
+}
+
+int read(){
+    int x=0;
+    char ch=getchar();
+    while(ch<'0'||ch>'9') ch=getchar();
+    while(ch>='0'&&ch<='9'){
+        x=x*10+ch-'0';
+        ch=getchar();
+    }
+    return x;
+}
+
+void write(int n){
+    if(n>=10)write(n/10);
+    putchar(n%10+'0');
 }
 
 const int N=1<<18;
-int g[N],f[N],tmp[N];
+int g[N],f[N];
 int main(){
     g[0]=1;
     for(int i=1;i<N>>1;i++){
         g[i]=(ll)g[i-1]*i%mod;
     }
-    polynomial_inverse(g,f,tmp,N>>1);
+    polynomial_inverse(g,f,N>>1);
     f[0]=0;
     for(int i=1;i<N>>1;i++){
         f[i]=(mod-f[i])%mod;
     }
-    int T;
-    cin>>T;
+    int T=read();
     while(T--){
-        int n;
-        scanf("%d",&n);
-        printf("%d\n",f[n]);
+        int n=read();
+        write(f[n]);
+        putchar('\n');
     }
     return 0;
 }
