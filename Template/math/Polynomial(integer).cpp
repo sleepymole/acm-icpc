@@ -78,7 +78,7 @@ void polynomial_sqrt(int a[],int b[],int n){
     int len=1;
     while(len<n) len<<=1;
     int *tmp=new int[len<<1]; //视情况而定,若调用较多，可改为静态数组
-    b[0]=1;//若A(x)的常数项不为0,b[0]应该等于a[0]关于mod的二次剩余
+    b[0]=1;//若A(x)的常数项不为1,b[0]应该等于a[0]关于mod的二次剩余
     for(int h=2;h<=len;h<<=1){
         int p=h<<1;
         fill(tmp,tmp+p,0);
@@ -115,6 +115,7 @@ void polynomial_logarithm(int a[],int b[],int n){
     for(int i=0;i<n-1;i++){ //求导
         b[i]=(ll)b[i+1]*(i+1)%mod;
     }
+    b[n-1]=0;
     transform(tmp,p,1);
     transform(b,p,1);
     for(int i=0;i<p;i++){
@@ -138,13 +139,15 @@ void polynomial_exponent(int a[],int b[],int n){
         fill(tmp,tmp+p,0);
         polynomial_logarithm(b,tmp,h);
         for(int i=0;i<h;i++){
-            tmp[i]=(a[i]-tmp[i]+1)%mod;
+            tmp[i]=((a[i]-tmp[i])%mod+mod)%mod;
         }
+        tmp[0]++;
         transform(b,p,1);
         transform(tmp,p,1);
         for(int i=0;i<p;i++){
             b[i]=(ll)b[i]*tmp[i]%mod;
         }
+        transform(b,p,-1);
         fill(b+h,b+p,0);
     }
     fill(b+n,b+len,0);
