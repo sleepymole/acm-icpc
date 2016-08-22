@@ -7,7 +7,9 @@ typedef long long ll;
 
 const int maxn=100010;
 int prime[maxn/10],primeCnt;
+int e[maxn],div_num[maxn];
 bool notprime[maxn];
+
 void getPrime(){
     notprime[0]=notprime[1]=true;
     for(int i=2;i<maxn;i++){
@@ -16,6 +18,29 @@ void getPrime(){
             if(i>maxn/i) continue;
             for(int j=i*i;j<maxn;j+=i){
                 notprime[j]=true;
+            }
+        }
+    }
+}
+
+void get_prime_divnum(){
+    div_num[1]=1;
+    for(int i=2;i<maxn;i++){
+        if(!notprime[i]){                         
+            prime[primeCnt++]=i;
+			e[i]=1;
+			div_num[i]=2;
+        }
+		for(int j=0;j<primeCnt&&i*prime[j]<maxn;j++){
+			notprime[i*prime[j]]=true;        
+            if(i%prime[j]==0){
+            	div_num[i*prime[j]]=div_num[i]/(e[i]+1)*(e[i]+2);
+            	e[i*prime[j]]=e[i]+1;
+            	break;
+            }
+        	else{
+            	div_num[i*prime[j]]=div_num[i]*div_num[prime[j]];
+        		e[i*prime[j]]=1;
             }
         }
     }

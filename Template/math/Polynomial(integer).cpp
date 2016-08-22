@@ -123,7 +123,7 @@ void polynomial_logarithm(int a[],int b[],int n){
     }
     transform(b,p,-1);
     for(int i=n-1;i>0;i--){
-        b[i]=(ll)b[i-1]*inverse(i,mod)%mod;
+        b[i]=(ll)b[i-1]*inverse(i,mod)%mod; //可以把1-n关于mod的逆打表
     }
     b[0]=0;//视情况而定
     fill(b+n,b+p,0);
