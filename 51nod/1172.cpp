@@ -7,7 +7,26 @@
 using namespace std;
 typedef long long ll;
 const int mod=1000000007;
+const int p[]={25*(1<<22)+1,5*(1<<25)+1,7*(1<<26)+1};
 const int G=3;
+const int N=1<<17;
+__int128 M,wy[3],sum;
+
+void initial(){
+    ll w[3],y[3];
+    w[0]=(ll)p[1]*p[2];w[1]=(ll)p[0]*p[2];w[2]=(ll)p[0]*p[1];
+    y[0]=803507;y[1]=12427566;y[2]=-38396896;
+    M=(__int128)p[0]*p[1]*p[2];
+    for(int s=0;s<3;s++){
+        wy[s]=(__int128)w[s]*y[s]%M;
+        wy[s]=(wy[s]+M)%M;
+    }
+}
+
+inline int merge(int x,int y,int z){
+    sum=(x*wy[0]+y*wy[1]+z*wy[2])%M;
+    return sum%mod;
+}
 
 int inverse(int a,int m){
     return a==1?1:(ll)inverse(m%a,m)*(m-m/a)%m;
@@ -65,19 +84,10 @@ void write(int n){
     putchar(n%10+'0');
 }
 
-const int p[]={7340033,23068673,998244353};
-const int N=1<<17;
 int f[3][N],g[3][N];
 
 int main(){
-    ll w[3],y[3];
-    w[0]=(ll)p[1]*p[2];w[1]=(ll)p[0]*p[2];w[2]=(ll)p[0]*p[1];
-    y[0]=1797855;y[1]=5718385;y[2]=-491958351;
-    __int128 M=(__int128)p[0]*p[1]*p[2],wy[3],sum;
-    for(int s=0;s<3;s++){
-        wy[s]=(__int128)w[s]*y[s]%M;
-        wy[s]=(wy[s]+M)%M;
-    }
+    initial();
     int n,k,x;
     n=read();k=read();
     for(int i=0;i<n;i++){
@@ -102,14 +112,7 @@ int main(){
         transform(f[s],len,-1,p[s]);
     }
     for(int i=0;i<n;i++){
-        sum=0;
-        for(int s=0;s<3;s++){
-            sum=(sum+wy[s]*f[s][i]%M)%M;
-        }
-        f[0][i]=sum%mod;
-    }
-    for(int i=0;i<n;i++){
-        write(f[0][i]);
+        write(merge(f[0][i],f[1][i],f[2][i]));
         putchar('\n');
     }
     return 0;

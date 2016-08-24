@@ -5,7 +5,7 @@ using namespace std;
 typedef long long ll;
 const int mod=1000000007;
 const int p[]={25*(1<<22)+1,5*(1<<25)+1,7*(1<<26)+1};
-const int N=1<<17,G=3;
+const int N=1<<12,G=3;
 __int128 M,wy[3],sum;
 
 void merge_initial(){
