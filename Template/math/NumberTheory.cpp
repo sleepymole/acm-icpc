@@ -78,6 +78,7 @@ int getFactor(ll x){
         if(prime[i]>x/prime[i]) break;
         if(x%prime[i]==0){
             factor[fatCnt][0]=prime[i];
+            factor[fatCnt][1]=0;
             while(x%prime[i]==0){
                 factor[fatCnt][1]++;
                 x/=prime[i];
