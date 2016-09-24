@@ -18,12 +18,25 @@ void merge_initial(){
     }
 }
 
-inline int merge(int x,int y,int z){
+void merge(int &x,int &y,int &z){
     sum=(x*wy[0]+y*wy[1]+z*wy[2])%M;
-    return sum%mod;
+    x=y=z=sum%mod;
+}
+
+
+void merge_initial2(){
+    wy[0]=34952532LL*p[1];
+    wy[1]=111848110LL*p[0];
+    M=(__int128)p[0]*p[1];
+}
+
+void merge2(int &x,int &y){
+    sum=(x*wy[0]+y*wy[1])%M;
+    x=y=sum%mod;
 }
 
 int main(){
     merge_initial();
+    
     return 0;
 }
