@@ -20,8 +20,8 @@ void write(int n){
 }
 
 int main(){
-    freopen("in.txt","r",stdin);
-    freopen("out.txt","w",stdout);
+    freopen("input","r",stdin);
+    freopen("output","w",stdout);
     int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
     
     int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
