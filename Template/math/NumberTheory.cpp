@@ -1,45 +1,30 @@
 #include<iostream>
-#include<cstring>
 #include<cstdio>
 #include<ctime>
 using namespace std;
 typedef long long ll;
+const int maxn=10000010;
 
-const int maxn=100010;
-int prime[maxn/10],primeCnt;
+int prime[maxn],euler[maxn];
 int e[maxn],div_num[maxn];
-bool notprime[maxn];
-
-void getPrime(){
-    notprime[0]=notprime[1]=true;
+void Sieve(){
+    euler[1]=1; div_num[1]=1;
     for(int i=2;i<maxn;i++){
-        if(!notprime[i]){
-            prime[primeCnt++]=i;
-            if(i>maxn/i) continue;
-            for(int j=i*i;j<maxn;j+=i){
-                notprime[j]=true;
-            }
+        if(!prime[i]){
+            prime[++prime[0]]=i;
+            euler[i]=i-1;
+            e[i]=1; div_num[i]=2;
         }
-    }
-}
-
-void get_prime_divnum(){
-    div_num[1]=1;
-    for(int i=2;i<maxn;i++){
-        if(!notprime[i]){                         
-            prime[primeCnt++]=i;
-			e[i]=1;
-			div_num[i]=2;
-        }
-		for(int j=0;j<primeCnt&&i*prime[j]<maxn;j++){
-			notprime[i*prime[j]]=true;        
+        for(int j=1;j<=prime[0]&&prime[j]<maxn/i;j++){
+            prime[i*prime[j]]=1;
             if(i%prime[j]==0){
-            	div_num[i*prime[j]]=div_num[i]/(e[i]+1)*(e[i]+2);
+                euler[i*prime[j]]=euler[i]*prime[j];
+                div_num[i*prime[j]]=div_num[i]/(e[i]+1)*(e[i]+2);
             	e[i*prime[j]]=e[i]+1;
-            	break;
-            }
-        	else{
-            	div_num[i*prime[j]]=div_num[i]*div_num[prime[j]];
+                break;
+            }else{
+                euler[i*prime[j]]=euler[i]*(prime[j]-1);
+                div_num[i*prime[j]]=div_num[i]*div_num[prime[j]];
         		e[i*prime[j]]=1;
             }
         }
@@ -58,7 +43,6 @@ int euler_phi(int n){
     return ans;
 }
 
-int euler[maxn];
 void getEuler(){
     euler[1]=1;
     for(int i=2;i<maxn;i++){
@@ -74,7 +58,7 @@ void getEuler(){
 int factor[100][2];
 int getFactor(ll x){
     int fatCnt=0;
-    for(int i=0;i<primeCnt;i++){
+    for(int i=1;i<=prime[0];i++){
         if(prime[i]>x/prime[i]) break;
         if(x%prime[i]==0){
             factor[fatCnt][0]=prime[i];
@@ -104,7 +88,6 @@ int power_mod(int a,int n,int p){
     return r;
 }
 
-//最小原根
 int getPrimitiveRoot(int p){
     int n=getFactor(p-1);
     for(int x=2;x<p;x++){
@@ -120,13 +103,19 @@ int getPrimitiveRoot(int p){
 }
 
 void initial(){
-    getPrime();
-    getEuler();
+    Sieve();
 }
+
+void test(){
+
+}
+
 int main(){
-    initial();
+    freopen("input","r",stdin);
+    freopen("output","w",stdout);
     int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    //TODO
+    initial();
+    test();
     int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
     cout<<(endTime-startTime)<<"ms"<<endl;
     return 0;
