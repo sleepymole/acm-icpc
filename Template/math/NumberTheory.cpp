@@ -1,37 +1,43 @@
-#include<iostream>
-#include<cstdio>
-#include<ctime>
+#include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-const int maxn=10000010;
+const int maxn=1000010;
 
-int prime[maxn],euler[maxn];
-int e[maxn],div_num[maxn];
-void Sieve(){
-    euler[1]=1; div_num[1]=1;
+int prime[maxn];
+void pre(){
+    for(int i=2;i<maxn;i++){
+        if(!prime[i]) prime[++prime[0]]=i;
+        for(int j=1;j<=prime[0]&&i<maxn/prime[j];j++){
+            prime[i*prime[j]]=1;
+            if(i%prime[j]==0) break;
+        }
+    }
+}
+
+int euler[maxn],mu[maxn];
+void pre2(){
+    euler[1]=mu[1]=1;
     for(int i=2;i<maxn;i++){
         if(!prime[i]){
             prime[++prime[0]]=i;
             euler[i]=i-1;
-            e[i]=1; div_num[i]=2;
+            mu[i]=-1;
         }
-        for(int j=1;j<=prime[0]&&prime[j]<maxn/i;j++){
+        for(int j=1;j<=prime[0]&&i<maxn/prime[j];j++){
             prime[i*prime[j]]=1;
             if(i%prime[j]==0){
                 euler[i*prime[j]]=euler[i]*prime[j];
-                div_num[i*prime[j]]=div_num[i]/(e[i]+1)*(e[i]+2);
-            	e[i*prime[j]]=e[i]+1;
+                mu[i*prime[j]]=0;
                 break;
             }else{
                 euler[i*prime[j]]=euler[i]*(prime[j]-1);
-                div_num[i*prime[j]]=div_num[i]*div_num[prime[j]];
-        		e[i*prime[j]]=1;
+                mu[i*prime[j]]=-mu[i];
             }
         }
     }
 }
 
-int euler_phi(int n){
+int getEuler(int n){
     int ans=n;
     for(int i=2;i<=n/i;i++){
         if(n%i==0){
@@ -43,17 +49,6 @@ int euler_phi(int n){
     return ans;
 }
 
-void getEuler(){
-    euler[1]=1;
-    for(int i=2;i<maxn;i++){
-        if(!euler[i]){
-            for(int j=i;j<maxn;j+=i){
-                if(!euler[j]) euler[j]=j;
-                euler[j]=euler[j]/i*(i-1);
-            }
-        }
-    }
-}
 
 int factor[100][2];
 int getFactor(ll x){
@@ -102,21 +97,8 @@ int getPrimitiveRoot(int p){
     return -1;
 }
 
-void initial(){
-    Sieve();
-}
-
-void test(){
-
-}
-
 int main(){
-    freopen("input","r",stdin);
-    freopen("output","w",stdout);
-    int startTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    initial();
-    test();
-    int endTime=(int)((double)clock()/CLOCKS_PER_SEC*1000);
-    cout<<(endTime-startTime)<<"ms"<<endl;
+    pre();
+    cin.get();
     return 0;
 }
