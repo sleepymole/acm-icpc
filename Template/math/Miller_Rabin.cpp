@@ -12,7 +12,7 @@ long long power_mod(long long a,long long n,long long m){
     return r;
 }
 
-long long witness(long long a,long long p){
+bool witness(long long a,long long p){
     long long q=p-1,k=0;
     while(q%2==0){
         k++;q/=2;
@@ -27,8 +27,8 @@ long long witness(long long a,long long p){
 }
 
 bool miller_rabin(long long p){
-    if(p==1||p%2==0) return false;
     if(p==2) return true;
+    if(p==1||p%2==0) return false;
     for(int i=0;i<50;i++){
         long long a=rand()%(p-1)+1;
         if(witness(a,p)) return false;
