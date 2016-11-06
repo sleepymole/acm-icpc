@@ -1,29 +1,29 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-const int maxn=1000010;
+const int N=100000;
 
-int prime[maxn];
+int prime[N+1];
 void pre(){
-    for(int i=2;i<maxn;i++){
+    for(int i=2;i<=N;i++){
         if(!prime[i]) prime[++prime[0]]=i;
-        for(int j=1;j<=prime[0]&&i<maxn/prime[j];j++){
+        for(int j=1;j<=prime[0]&&i<=N/prime[j];j++){
             prime[i*prime[j]]=1;
             if(i%prime[j]==0) break;
         }
     }
 }
 
-int euler[maxn],mu[maxn];
+int euler[N+1],mu[N+1];
 void pre2(){
     euler[1]=mu[1]=1;
-    for(int i=2;i<maxn;i++){
+    for(int i=2;i<=N;i++){
         if(!prime[i]){
             prime[++prime[0]]=i;
             euler[i]=i-1;
             mu[i]=-1;
         }
-        for(int j=1;j<=prime[0]&&i<maxn/prime[j];j++){
+        for(int j=1;j<=prime[0]&&i<=N/prime[j];j++){
             prime[i*prime[j]]=1;
             if(i%prime[j]==0){
                 euler[i*prime[j]]=euler[i]*prime[j];
