@@ -134,11 +134,15 @@ int main(){
     cin>>n>>m;
     int x,A,B;
     cin>>x>>A>>B;
+    if(x>23333){
+        x=((ll)A*x+B)%23333+1;
+        n--;
+    }
     a[0]=1;
     int len=0;
     for(int i=1;i<=n;i++){
         if(x+1>len) len=x+1;        
-        a[x]=(a[x]+P-1)%P; 
+        a[x]=(a[x]+P-1)%P; x=(A*x+B)%23333+1;
     }
     for(int h=2,d=1;h<=N;h<<=1,d++){
         wn[d]=power_mod(G,(P-1)/h,P);
