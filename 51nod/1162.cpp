@@ -88,7 +88,6 @@ int128 pollard_rho(int128 n,int c){
         if(y==x0) return n;
         if(i==k) y=x0,k<<=1;
     }
-    
 }
 
 int f[25]={0xdc9438b,0x466141b5,0xdff4d6,0x27e90edd,
