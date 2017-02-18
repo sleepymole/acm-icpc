@@ -2,6 +2,7 @@
     "version": "0.1.0",
     "command": "g++-6",
     "args": [
+        "-g",
         "-Wall",
         // "-O2",
         "-std=c++14",

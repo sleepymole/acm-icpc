@@ -1,0 +1,28 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.vscode": true,
+        "**/.DS_Store": true,
+        "**/debug": true,
+        "**/.clang-format": true
+    },
+    "editor.quickSuggestions": false,
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.parameterHints": false,
+    "editor.tabCompletion": true,
+    "C_Cpp.autocomplete": "Disabled",
+    "clang.cflags": [
+        "-std=c++14"
+    ],
+    "clang.cxxflags": [
+        "-std=c++14"
+    ],
+    "clang.completion.enable": false,
+    "clang.completion.completeMacros": false,
+    "C_Cpp.clang_format_path": null,
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_fallbackStyle": "Visual Studio"
+}
