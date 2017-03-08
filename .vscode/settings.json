@@ -24,5 +24,16 @@
     "clang.completion.completeMacros": false,
     "C_Cpp.clang_format_path": null,
     "C_Cpp.clang_format_style": "file",
-    "C_Cpp.clang_format_fallbackStyle": "Visual Studio"
+    "C_Cpp.clang_format_fallbackStyle": "Visual Studio",
+    "files.associations": {
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "sstream": "cpp",
+        "ostream": "cpp"
+    }
 }
