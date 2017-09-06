@@ -29,13 +29,14 @@ ll get_phi(ll m, int n) {
     if (m < prime[n]) return 1;
     if (m <= N && m <= (ll) prime[n] * prime[n] * prime[n]) {
         ll ans = pi[m] - n + 1;
-        for (int i = n + 1, l = pi[(int) sqrt(m + 0.1)]; i <= l; i++)
-            ans += pi[m / prime[i]] - i + 1;
+        int l = n + 1, r = pi[(int) sqrt(m + 0.1)];
+        for (int i = l; i <= r; i++) ans += pi[m / prime[i]] - i + 1;
         return ans;
     }
     return get_phi(m, n - 1) - get_phi(m / prime[n], n - 1);
 }
 
+// prime-counting function
 ll get_pi(ll m) {
     if (m <= N) return pi[m];
     int n = pi[(int) cbrt(m - 0.1) + 1];
@@ -45,6 +46,7 @@ ll get_pi(ll m) {
     return ans;
 }
 
+// the nth prime, 1<=n<=1e9
 bool f[1000010];
 ll get_pn(ll n) {
     if (n <= prime[0]) return prime[n];
@@ -65,13 +67,13 @@ ll get_pn(ll n) {
         }
     }
     ll count = flag ? flag : get_pi(l - 1);
-    for (int i = 1, li = pi[(int) sqrt(r + 0.1)]; i <= li; i++) {
-        for (int j = ((l - 1) / prime[i] + 1) * prime[i] - l; j <= r - l + 1;
+    for (int i = 1, right = pi[(int) sqrt(r + 0.1)]; i <= right; i++) {
+        for (int j = ((l - 1) / prime[i] + 1) * prime[i] - l; j <= r - l;
              j += prime[i]) {
             f[j] = true;
         }
     }
-    for (int i = 0; i <= r - l + 1; i++) {
+    for (int i = 0; i <= r - l; i++) {
         if (!f[i]) {
             count++;
             if (count == n) return i + l;
@@ -83,7 +85,6 @@ ll get_pn(ll n) {
 int main() {
     init();
     ll n;
-    cin >> n;
-    cout << get_pn(n) << endl;
+    while (cin >> n) cout << get_pn(n) << endl;
     return 0;
 }
