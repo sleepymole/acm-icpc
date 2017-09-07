@@ -1,5 +1,5 @@
 # Template
-####math
+#### math
 * count_prime.cpp
 ``` cpp
 #include <cmath>
@@ -518,7 +518,7 @@ int main() {
 
 
 
-####other
+#### other
 * io.cpp
 ``` cpp
 #include <cstdio>
