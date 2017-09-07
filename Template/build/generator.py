@@ -1,10 +1,10 @@
 import os
-import queue
 
 script_dir = os.path.split(os.path.realpath(__file__))[0]
 root_dir = script_dir.replace('/build', '')
 
 items = ['# Template\n']
+
 
 def gen_md(path, depth):
     dirs = []
@@ -22,9 +22,9 @@ def gen_md(path, depth):
         if path == root_dir and d == 'build':
             continue
         items.append('#' * (depth + 3))
-        items.append(d + '\n')
+        items.append(' ' + d + '\n')
         gen_md(path + '/' + d, depth + 1)
-    
+
 
 gen_md(root_dir, 1)
 md = ''.join(items)
