@@ -40,6 +40,5 @@ void merge2(int &x, int &y) {
 
 int main() {
     merge_initial();
-
     return 0;
 }
