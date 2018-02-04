@@ -50,11 +50,11 @@ int main() {
             std::queue<int> tmp;
             auto last = index.upper_bound(r);
             for (auto it = index.lower_bound(l); it != last; ++it) {
-                int index = *it;
-                add(index, n, divisor[a[index]] - a[index]);
-                a[index] = divisor[a[index]];
-                if (a[index] <= 2) {
-                    tmp.push(index);
+                int i = *it;
+                add(i, n, divisor[a[i]] - a[i]);
+                a[i] = divisor[a[i]];
+                if (a[i] <= 2) {
+                    tmp.push(i);
                 }
             }
             while (!tmp.empty()) {
