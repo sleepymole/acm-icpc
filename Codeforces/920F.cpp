@@ -31,14 +31,15 @@ void init_divisor() {
 }
 
 int main() {
+    std::ios::sync_with_stdio(false);
     int n, m;
     std::cin >> n >> m;
-    std::set<int> available_index;
+    std::set<int> index;
     for (int i = 1; i <= n; i++) {
         std::cin >> a[i];
         add(i, n, a[i]);
         if (a[i] > 2) {
-            available_index.insert(i);
+            index.insert(i);
         }
     }
     init_divisor();
@@ -46,19 +47,19 @@ int main() {
         int t, l, r;
         std::cin >> t >> l >> r;
         if (t == 1) {
-            std::queue<int> pending_erase;
-            auto last = available_index.upper_bound(r);
-            for (auto it = available_index.lower_bound(l); it != last; ++it) {
+            std::queue<int> tmp;
+            auto last = index.upper_bound(r);
+            for (auto it = index.lower_bound(l); it != last; ++it) {
                 int index = *it;
                 add(index, n, divisor[a[index]] - a[index]);
                 a[index] = divisor[a[index]];
                 if (a[index] <= 2) {
-                    pending_erase.push(index);
+                    tmp.push(index);
                 }
             }
-            while (!pending_erase.empty()) {
-                available_index.erase(pending_erase.front());
-                pending_erase.pop();
+            while (!tmp.empty()) {
+                index.erase(tmp.front());
+                tmp.pop();
             }
         } else {
             std::cout << sum(r) - sum(l - 1) << "\n";
